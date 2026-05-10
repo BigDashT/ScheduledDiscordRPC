@@ -1,8 +1,9 @@
-[logo]: https://i.imgur.com/2uFlMMT.png "Logo"
 
- ![alt text](https://i.imgur.com/2uFlMMT.png "Logo")
+<p align="center">
+<img src="https://i.imgur.com/2uFlMMT.png" width="100" height="100" border="10"/>
+</p>
 
-#Scheduled Discord Rich Presence - A Custom Discord RPC for Employed People!
+# Scheduled Discord Rich Presence - A Custom Discord RPC for Employed People!
 
 **Create multiple rich presence profiles and have them displayed in Discord on a configurable, Microsoft Teams style scheduler!**
 

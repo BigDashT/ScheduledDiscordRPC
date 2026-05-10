@@ -103,20 +103,6 @@ Check the box **"Run on Windows startup"** in the main window. The app adds itse
 
 ---
 
-## 📁 Project Structure (for developers)
-
-ScheduledDiscordRPC/
-├── Models.cs                     # Schedule, RichPresenceConfig, Recurrence logic
-├── ConfigManager.cs              # JSON save/load in %APPDATA%
-├── MainForm.cs                   # Main window + tray + timer + RPC client
-├── MainForm.Designer.cs          # Main UI layout
-├── EditScheduleForm.cs           # Schedule editor logic
-├── EditScheduleForm.Designer.cs  # Teams-style editor UI
-└── Program.cs                    # Application entry point
-
-
----
-
 ## 🔧 Troubleshooting
 
 - **Rich Presence not showing**: Make sure Discord is running and you entered the correct Client ID.

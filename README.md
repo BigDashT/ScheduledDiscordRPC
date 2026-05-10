@@ -3,7 +3,7 @@
 <img src="https://i.imgur.com/2uFlMMT.png" width="100" height="100" border="10"/>
 </p>
 
-# Scheduled Discord Rich Presence - RPC for Employed People!
+# Scheduled Discord RPC - RPC for Employed People!
 
 **Create multiple rich presence profiles and have them displayed in Discord on a configurable, Microsoft Teams style scheduler!**
 

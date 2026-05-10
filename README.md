@@ -1,4 +1,5 @@
-[logo](https://i.imgur.com/2uFlMMT.png)
+![Uploading Discord RPC Custom.png…]()
+
 
 # Scheduled Discord Rich Presence - A Custom Discord RPC for Employed People!
 

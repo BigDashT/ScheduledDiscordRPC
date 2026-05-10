@@ -92,7 +92,6 @@ Check the box **"Run on Windows startup"** in the main window. The app adds itse
    5. On the Publish profile page, click the **gear icon** (Show all settings) or the pencil icon to edit.
    6. In the settings:
       - Make sure **Configuration** is **Release**
-      - Under **Deployment mode**, choose **Self-contained**
       - Check these two boxes:
         - **Produce single file**
         - **Trim unused assemblies** (recommended – makes the file smaller)

@@ -1,3 +1,5 @@
+<img width="733" height="733" alt="image" src="https://github.com/user-attachments/assets/7538549c-55fa-4e78-b87f-1d8e9be5c2a1" /> 
+
 # Scheduled Discord Rich Presence - A Custom Discord RPC for Employed People!
 
 **Create multiple rich presence profiles and have them displayed in Discord on a configurable, Microsoft Teams style scheduler!**

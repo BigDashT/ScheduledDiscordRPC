@@ -1,3 +1,5 @@
+[logo]: https://i.imgur.com/ZjYbEnC.png
+
 # Scheduled Discord Rich Presence - A Custom Discord RPC for Employed People!
 
 **Create multiple rich presence profiles and have them displayed in Discord on a configurable, Microsoft Teams style scheduler!**

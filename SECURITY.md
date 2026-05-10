@@ -24,3 +24,5 @@ When submitting a security exploit, please include the following details:
 AI Slop vulnerability findings will not be accepted. AI code vulnerability scanners are prone to false positives and create PoCs with unrealistic enviromental requirements.
 
 Please embargo/refrain from disclosing your exploit for at least 60 days to give me time to resolve the vulnerability.
+
+Don't make payment a condition of disclosure. I have no money lmfao

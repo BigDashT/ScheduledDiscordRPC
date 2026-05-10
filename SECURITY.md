@@ -20,6 +20,7 @@ When submitting a security exploit, please include the following details:
 - A complete PoC script/setup
 - A CVSS 3.1 or 4.0 assessment
 - A patch, if possible
+
 AI Slop vulnerability findings will not be accepted. AI code vulnerability scanners are prone to false positives and create PoCs with unrealistic enviromental requirements.
 
 Please embargo/refrain from disclosing your exploit for at least 60 days to give me time to resolve the vulnerability.

@@ -1,8 +1,15 @@
+
+<p align="center">
+<img src="https://i.imgur.com/2uFlMMT.png" width="100" height="100" border="10"/>
+</p>
+
 # Scheduled Discord Rich Presence - A Custom Discord RPC for Employed People!
 
 **Create multiple rich presence profiles and have them displayed in Discord on a configurable, Microsoft Teams style scheduler!**
 
 Runs in the background (system tray) and will automatically update your Discord rich presence based on set schedules. Use it to let people know you're busy at work, on holidays or free to do whatever!
+
+This project uses components discord-rpc-csharp (https://github.com/Lachee/discord-rpc-csharp), which is licensed under MIT
 
 ---
 
@@ -92,7 +99,6 @@ Check the box **"Run on Windows startup"** in the main window. The app adds itse
    5. On the Publish profile page, click the **gear icon** (Show all settings) or the pencil icon to edit.
    6. In the settings:
       - Make sure **Configuration** is **Release**
-      - Under **Deployment mode**, choose **Self-contained**
       - Check these two boxes:
         - **Produce single file**
         - **Trim unused assemblies** (recommended – makes the file smaller)

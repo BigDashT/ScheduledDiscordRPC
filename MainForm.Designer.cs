@@ -44,13 +44,14 @@ namespace ScheduledDiscordRPC
             // 
             lblClientId.Location = new Point(20, 20);
             lblClientId.Name = "lblClientId";
-            lblClientId.Size = new Size(120, 23);
+            lblClientId.Size = new Size(128, 23);
             lblClientId.TabIndex = 0;
-            lblClientId.Text = "Discord Client ID";
+            lblClientId.Text = "Discord Application ID";
+            lblClientId.Click += lblClientId_Click;
             // 
             // txtClientId
             // 
-            txtClientId.Location = new Point(150, 18);
+            txtClientId.Location = new Point(154, 17);
             txtClientId.Name = "txtClientId";
             txtClientId.Size = new Size(400, 23);
             txtClientId.TabIndex = 1;

@@ -334,5 +334,10 @@ namespace ScheduledDiscordRPC
             }
             base.OnFormClosing(e);
         }
+
+        private void lblClientId_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

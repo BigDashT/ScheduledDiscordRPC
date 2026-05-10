@@ -3,13 +3,13 @@
 <img src="https://i.imgur.com/2uFlMMT.png" width="100" height="100" border="10"/>
 </p>
 
-# Scheduled Discord Rich Presence - A Custom Discord RPC for Employed People!
+# Scheduled Discord RPC - RPC for Employed People!
 
 **Create multiple rich presence profiles and have them displayed in Discord on a configurable, Microsoft Teams style scheduler!**
 
 Runs in the background (system tray) and will automatically update your Discord rich presence based on set schedules. Use it to let people know you're busy at work, on holidays or free to do whatever!
 
-This project uses components discord-rpc-csharp (https://github.com/Lachee/discord-rpc-csharp), which is licensed under MIT
+This project uses components from [discord-rpc-csharp](https://github.com/Lachee/discord-rpc-csharp), which is licensed under MIT
 
 ---
 
@@ -19,12 +19,12 @@ This project uses components discord-rpc-csharp (https://github.com/Lachee/disco
 - **Full Rich Presence support**: Details, State, Large/Small Images, up to 2 buttons with URLs
 - **System tray icon** with quick status and exit
 - **Run on Windows startup** (optional)
-- **Lightweight** — polls every 30 seconds to avoid rate limits, very low CPU/memory usage (30MB at most)
+- **Lightweight** — polls every 30 seconds only to avoid rate limits, very low CPU/memory usage (30MB at most)
 - **Persistent config** stored in `%APPDATA%\ScheduledDiscordRPC\config.json`
 
 ---
 
-## 🚀 How to Use (End-User Guide)
+## 🚀 How to Use
 
 Before setting up, make sure you have a standalone Discord client (not in browser) and have enabled sharing your activity in Discord settings.
 Share my activity must be enabled and set to an option other than "Do not share"
@@ -111,20 +111,13 @@ Check the box **"Run on Windows startup"** in the main window. The app adds itse
 
 ## 🔧 Troubleshooting
 
-- **Rich Presence not showing**: Make sure Discord is running and you entered the correct Client ID.
+- **Rich Presence not showing**: Make sure Discord is running and you entered the correct Client ID. Also make sure "Show activity" is enabled.
 - **Status not changing**: Check that at least one schedule is active (green icon in grid).
 - **Why don't my buttons show?** Known Discord bug, you can't see your own buttons. Others can see them.
 - **It was working before, now it isn't suddenly!** You might have gotten a timeout from Discord because of connecting/changing presence a lot. Disconnect, wait 5-10 minutes, try to connect again. Restarting Discord might help too.
 ---
 
-## 📄 License
-
-This project is open-source under the **MIT License**.  
-The only dependency (`DiscordRichPresence`) is also MIT licensed.
-
----
-
 **Enjoy never manually updating your Discord status again!** 🎉
 
-Any questions or feature requests? Just open an issue or reply here.
+Any questions or feature requests? Just open an issue.
 

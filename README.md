@@ -70,7 +70,7 @@ Check the box **"Run on Windows startup"** in the main window. The app adds itse
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/BigDashT/ScheduledDiscordRPC.git```
+   git clone https://github.com/BigDashT/ScheduledDiscordRPC.git
 
 2. **Open the project**
    - Open Visual Studio 2022.

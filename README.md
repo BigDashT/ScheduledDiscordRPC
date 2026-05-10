@@ -4,6 +4,8 @@
 
 Runs in the background (system tray) and will automatically update your Discord rich presence based on set schedules. Use it to let people know you're busy at work, on holidays or free to do whatever!
 
+This project uses components discord-rpc-csharp (https://github.com/Lachee/discord-rpc-csharp), which is licensed under MIT
+
 ---
 
 ## ✨ Features

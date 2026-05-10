@@ -1,10 +1,11 @@
 ﻿// ================================================
-// MAINF0RM.cs  (FULL - corrected - paste this entirely)
+// MAINFORM.cs
 using DiscordRPC;
 using System;
 using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Drawing;   // Added for Icon support
 
 namespace ScheduledDiscordRPC
 {
@@ -20,6 +21,21 @@ namespace ScheduledDiscordRPC
         public MainForm()
         {
             InitializeComponent();
+
+            // === CUSTOM ICON SETUP ===
+            try
+            {
+                var appIcon = new Icon("appicon.ico");
+                this.Icon = appIcon;                    // Main application window
+                _trayIcon.Icon = appIcon;               // System tray icon
+            }
+            catch (Exception ex)
+            {
+                // Fallback if icon file is missing
+                System.Diagnostics.Debug.WriteLine($"Warning: Could not load appicon.ico → {ex.Message}");
+                _trayIcon.Icon = SystemIcons.Application; // Default fallback
+            }
+
             LoadConfig();
             SetupTrayIcon();
             SetupClient();
@@ -200,7 +216,6 @@ namespace ScheduledDiscordRPC
 
         private void SetupTrayIcon()
         {
-            _trayIcon.Icon = SystemIcons.Application;
             _trayIcon.Visible = true;
             _trayIcon.Text = "Scheduled Discord RPC";
             _trayIcon.DoubleClick += (s, e) => ShowMainWindow();

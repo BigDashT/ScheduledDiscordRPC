@@ -27,91 +27,122 @@ namespace ScheduledDiscordRPC
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.lblClientId = new System.Windows.Forms.Label();
-            this.txtClientId = new System.Windows.Forms.TextBox();
-            this.chkStartup = new System.Windows.Forms.CheckBox();
-            this.dgvSchedules = new System.Windows.Forms.DataGridView();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.btnEdit = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
-            this.btnRefresh = new System.Windows.Forms.Button();
-            this.lblStatus = new System.Windows.Forms.Label();
-
-            ((System.ComponentModel.ISupportInitialize)this.dgvSchedules).BeginInit();
-            this.SuspendLayout();
-
-            // Form
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 650);
-            this.Text = "Scheduled Discord RPC";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-
-            // Client ID
-            this.lblClientId.Text = "Discord Client ID";
-            this.lblClientId.Location = new System.Drawing.Point(20, 20);
-            this.lblClientId.Size = new System.Drawing.Size(120, 23);
-
-            this.txtClientId.Location = new System.Drawing.Point(150, 18);
-            this.txtClientId.Size = new System.Drawing.Size(400, 23);
-            this.txtClientId.Leave += new System.EventHandler(this.txtClientId_Leave);
-
-            // Startup checkbox
-            this.chkStartup.Text = "Run on Windows startup";
-            this.chkStartup.Location = new System.Drawing.Point(20, 60);
-            this.chkStartup.Size = new System.Drawing.Size(300, 24);
-            this.chkStartup.CheckedChanged += new System.EventHandler(this.chkStartup_CheckedChanged);
-
-            // DataGridView
-            this.dgvSchedules.Location = new System.Drawing.Point(20, 100);
-            this.dgvSchedules.Size = new System.Drawing.Size(850, 400);
-            this.dgvSchedules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSchedules.MultiSelect = false;
-            this.dgvSchedules.AllowUserToAddRows = false;
-            this.dgvSchedules.AllowUserToDeleteRows = false;
-            this.dgvSchedules.ReadOnly = true;
-
-            // Buttons
-            this.btnAdd.Text = "Add";
-            this.btnAdd.Location = new System.Drawing.Point(20, 520);
-            this.btnAdd.Size = new System.Drawing.Size(100, 35);
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-
-            this.btnEdit.Text = "Edit";
-            this.btnEdit.Location = new System.Drawing.Point(130, 520);
-            this.btnEdit.Size = new System.Drawing.Size(100, 35);
-            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
-
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.Location = new System.Drawing.Point(240, 520);
-            this.btnDelete.Size = new System.Drawing.Size(100, 35);
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-
-            this.btnRefresh.Text = "Refresh";
-            this.btnRefresh.Location = new System.Drawing.Point(350, 520);
-            this.btnRefresh.Size = new System.Drawing.Size(100, 35);
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-
-            // Status label
-            this.lblStatus.Text = "Ready";
-            this.lblStatus.Location = new System.Drawing.Point(20, 580);
-            this.lblStatus.Size = new System.Drawing.Size(850, 23);
-            this.lblStatus.AutoSize = true;
-
-            this.Controls.Add(this.lblClientId);
-            this.Controls.Add(this.txtClientId);
-            this.Controls.Add(this.chkStartup);
-            this.Controls.Add(this.dgvSchedules);
-            this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.btnEdit);
-            this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.btnRefresh);
-            this.Controls.Add(this.lblStatus);
-
-            ((System.ComponentModel.ISupportInitialize)this.dgvSchedules).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            lblClientId = new Label();
+            txtClientId = new TextBox();
+            chkStartup = new CheckBox();
+            dgvSchedules = new DataGridView();
+            btnAdd = new Button();
+            btnEdit = new Button();
+            btnDelete = new Button();
+            btnRefresh = new Button();
+            lblStatus = new Label();
+            ((System.ComponentModel.ISupportInitialize)dgvSchedules).BeginInit();
+            SuspendLayout();
+            // 
+            // lblClientId
+            // 
+            lblClientId.Location = new Point(20, 20);
+            lblClientId.Name = "lblClientId";
+            lblClientId.Size = new Size(120, 23);
+            lblClientId.TabIndex = 0;
+            lblClientId.Text = "Discord Client ID";
+            // 
+            // txtClientId
+            // 
+            txtClientId.Location = new Point(150, 18);
+            txtClientId.Name = "txtClientId";
+            txtClientId.Size = new Size(400, 23);
+            txtClientId.TabIndex = 1;
+            txtClientId.Leave += txtClientId_Leave;
+            // 
+            // chkStartup
+            // 
+            chkStartup.Location = new Point(20, 60);
+            chkStartup.Name = "chkStartup";
+            chkStartup.Size = new Size(300, 24);
+            chkStartup.TabIndex = 2;
+            chkStartup.Text = "Run on Windows startup";
+            chkStartup.CheckedChanged += chkStartup_CheckedChanged;
+            // 
+            // dgvSchedules
+            // 
+            dgvSchedules.AllowUserToAddRows = false;
+            dgvSchedules.AllowUserToDeleteRows = false;
+            dgvSchedules.Location = new Point(20, 100);
+            dgvSchedules.MultiSelect = false;
+            dgvSchedules.Name = "dgvSchedules";
+            dgvSchedules.ReadOnly = true;
+            dgvSchedules.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvSchedules.Size = new Size(850, 400);
+            dgvSchedules.TabIndex = 3;
+            // 
+            // btnAdd
+            // 
+            btnAdd.Location = new Point(20, 520);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(100, 35);
+            btnAdd.TabIndex = 4;
+            btnAdd.Text = "Add";
+            btnAdd.Click += btnAdd_Click;
+            // 
+            // btnEdit
+            // 
+            btnEdit.Location = new Point(130, 520);
+            btnEdit.Name = "btnEdit";
+            btnEdit.Size = new Size(100, 35);
+            btnEdit.TabIndex = 5;
+            btnEdit.Text = "Edit";
+            btnEdit.Click += btnEdit_Click;
+            // 
+            // btnDelete
+            // 
+            btnDelete.Location = new Point(240, 520);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(100, 35);
+            btnDelete.TabIndex = 6;
+            btnDelete.Text = "Delete";
+            btnDelete.Click += btnDelete_Click;
+            // 
+            // btnRefresh
+            // 
+            btnRefresh.Location = new Point(350, 520);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(100, 35);
+            btnRefresh.TabIndex = 7;
+            btnRefresh.Text = "Refresh";
+            btnRefresh.Click += btnRefresh_Click;
+            // 
+            // lblStatus
+            // 
+            lblStatus.AutoSize = true;
+            lblStatus.Location = new Point(20, 580);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(39, 15);
+            lblStatus.TabIndex = 8;
+            lblStatus.Text = "Ready";
+            // 
+            // MainForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(900, 650);
+            Controls.Add(lblClientId);
+            Controls.Add(txtClientId);
+            Controls.Add(chkStartup);
+            Controls.Add(dgvSchedules);
+            Controls.Add(btnAdd);
+            Controls.Add(btnEdit);
+            Controls.Add(btnDelete);
+            Controls.Add(btnRefresh);
+            Controls.Add(lblStatus);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "MainForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Scheduled Discord RPC";
+            ((System.ComponentModel.ISupportInitialize)dgvSchedules).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
     }
 }

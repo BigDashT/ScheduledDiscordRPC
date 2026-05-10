@@ -37,10 +37,10 @@ namespace ScheduledDiscordRPC
             dtpEndTime.Value = Schedule.End;
             chkAllDay.Checked = Schedule.IsAllDay;
 
-            // Repeat combo
+            // === REPEAT COMBO ===
             cmbRepeat.Items.Clear();
             cmbRepeat.Items.AddRange(new[] { "Does not repeat", "Daily", "Every weekday", "Weekly", "Monthly" });
-            int idx = Schedule.Recurrence.Type switch
+            int repeatIdx = Schedule.Recurrence.Type switch
             {
                 RecurrenceType.None => 0,
                 RecurrenceType.Daily => 1,
@@ -49,10 +49,10 @@ namespace ScheduledDiscordRPC
                 RecurrenceType.Monthly => 4,
                 _ => 0
             };
-            cmbRepeat.SelectedIndex = idx;
+            cmbRepeat.SelectedIndex = repeatIdx;
             cmbRepeat.SelectedIndexChanged += cmbRepeat_SelectedIndexChanged;
 
-            // Weekly days
+            // === WEEKLY DAYS ===
             foreach (var day in Schedule.Recurrence.DaysOfWeek)
             {
                 CheckBox? cb = day switch
@@ -69,11 +69,16 @@ namespace ScheduledDiscordRPC
                 if (cb != null) cb.Checked = true;
             }
 
-            // === MONTHLY COMBO SAFETY FIX ===
+            // === MONTHLY COMBOS - populate BEFORE setting index ===
             if (cmbNth.Items.Count == 0)
                 cmbNth.Items.AddRange(new object[] { "1st", "2nd", "3rd", "4th", "Last" });
+
             if (cmbDayOfWeek.Items.Count == 0)
                 cmbDayOfWeek.Items.AddRange(new object[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" });
+
+            // === RECURRENCE END COMBO - THIS WAS THE MISSING PIECE ===
+            if (cmbRecurrenceEnd.Items.Count == 0)
+                cmbRecurrenceEnd.Items.AddRange(new object[] { "Never", "After", "On" });
 
             // Monthly settings
             if (Schedule.Recurrence.DayOfMonth.HasValue)
@@ -132,7 +137,6 @@ namespace ScheduledDiscordRPC
             chkAllDay.CheckedChanged += chkAllDay_CheckedChanged;
         }
 
-        // (All the other methods - chkAllDay_CheckedChanged, UpdateRepeatPanelVisibility, etc. - remain exactly the same as before)
         private void chkAllDay_CheckedChanged(object? sender, EventArgs e)
         {
             bool allDay = chkAllDay.Checked;
@@ -275,6 +279,11 @@ namespace ScheduledDiscordRPC
 
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void lblState_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

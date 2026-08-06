@@ -99,13 +99,20 @@ Check the box **"Run on Windows startup"** in the main window. The app adds itse
    5. On the Publish profile page, click the **gear icon** (Show all settings) or the pencil icon to edit.
    6. In the settings:
       - Make sure **Configuration** is **Release**
-      - Check these two boxes:
-        - **Produce single file**
-        - **Trim unused assemblies** (recommended – makes the file smaller)
+      - **Deployment mode**: **Framework-Dependent**
+      - **Target runtime**: pick your platform (e.g. `win-x86`)
+      - Check **Produce single file**
+      - Leave **Trim unused assemblies** *unchecked* — the .NET SDK does not support trimming
+        Windows Forms apps and the build will fail with error `NETSDK1175` if you enable it
+      - Do **not** switch Deployment mode to **Self-contained**: that bundles the entire .NET
+        desktop runtime (WPF included, even though this app doesn't use it) and balloons the
+        output to 100+ MB across several files instead of one small exe
    7. Click **Save**.
    8. Click the big **Publish** button.
 
-   The final single-file executable will be in the folder you chose, named `ScheduledDiscordRPC.exe`.
+   The final single-file executable will be in the folder you chose, named `ScheduledDiscordRPC.exe`
+   (roughly 1-2 MB). Running it requires the [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0)
+   — Windows will offer to install it automatically the first time the app is run if it's missing.
 
 ---
 

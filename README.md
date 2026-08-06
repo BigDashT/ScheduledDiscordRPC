@@ -29,7 +29,7 @@ This project uses components from [discord-rpc-csharp](https://github.com/Lachee
 Before setting up, make sure you have a standalone Discord client (not in browser) and have enabled sharing your activity in Discord settings.
 Share my activity must be enabled and set to an option other than "Do not share"
 
-### 1. Download the latest `ScheduledDiscordRPC.exe` (or the zip) from the Releases page. Extract and run.
+### 1. Download the latest `ScheduledDiscordRPC.zip` from the Releases page. Extract and run.
 The app will run in the system tray, right click for menu.
 ### 2. Get your Discord Client ID (one-time)
 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
@@ -77,7 +77,7 @@ Check the box **"Run on Windows startup"** in the main window. The app adds itse
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/BigDashT/ScheduledDiscordRPC.git
+   gh repo clone BigDashT/ScheduledDiscordRPC
 
 2. **Open the project**
    - Open Visual Studio 2022.

@@ -12,7 +12,7 @@ Only the latest version of this software is supported. Security exploits which c
 
 ## Reporting a Vulnerability
 
-[Private security reporting](https://goonfleet.com/index.php/topic/381527-impgsf-responsible-disclosure-policy/) is enabled for this project. Please make use of it when reporting security vulnerabilities/exploits.
+[Private security reporting](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/privately-reporting-a-security-vulnerability) is enabled for this project. Please make use of it when reporting security vulnerabilities/exploits.
 
 When submitting a security exploit, please include the following details:
 - Details about the nature of the exploit and how it works

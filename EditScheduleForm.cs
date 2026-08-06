@@ -6,6 +6,11 @@ using System.Linq;
 
 namespace ScheduledDiscordRPC
 {
+    /// <summary>
+    /// Modal "Add/Edit Schedule" dialog. Works on a private clone of the passed-in Schedule (or a
+    /// fresh one) so Cancel never mutates the caller's data; on Save, the clone is written back
+    /// into <see cref="Schedule"/> for the caller to read via DialogResult.OK.
+    /// </summary>
     public partial class EditScheduleForm : Form
     {
         public Schedule Schedule { get; private set; }
@@ -27,6 +32,7 @@ namespace ScheduledDiscordRPC
             LoadScheduleIntoUI();
         }
 
+        /// <summary>Populates every control on both tabs from <see cref="Schedule"/>.</summary>
         private void LoadScheduleIntoUI()
         {
             txtName.Text = Schedule.Name;
@@ -185,6 +191,7 @@ namespace ScheduledDiscordRPC
             dtpRecurrenceEnd.Visible = cmbRecurrenceEnd.SelectedIndex == 2;
         }
 
+        /// <summary>Validates the form, writes every control's value back into <see cref="Schedule"/>, and closes with DialogResult.OK.</summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtName.Text))
@@ -279,11 +286,6 @@ namespace ScheduledDiscordRPC
 
             DialogResult = DialogResult.OK;
             Close();
-        }
-
-        private void lblState_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

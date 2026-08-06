@@ -1,4 +1,4 @@
-﻿// ================================================
+// ================================================
 // MAINFORM.cs
 using DiscordRPC;
 using System;
@@ -9,32 +9,40 @@ using System.Drawing;   // Added for Icon support
 
 namespace ScheduledDiscordRPC
 {
+    /// <summary>
+    /// Main window and application "controller": owns the Discord RPC client, the system tray
+    /// icon, and the polling timer that evaluates schedules and pushes presence updates.
+    /// The window itself is just an editor for the schedule list — closing it hides it to the
+    /// tray rather than exiting (see OnFormClosing); the app keeps running until Exit is chosen
+    /// from the tray menu.
+    /// </summary>
     public partial class MainForm : Form
     {
         private DiscordRpcClient? _client;
         private AppConfig _config = new();
         private RichPresence? _currentPresence;
-        private System.Windows.Forms.Timer _timer = new() { Interval = 30000 };
+        private readonly System.Windows.Forms.Timer _timer = new() { Interval = 30000 };
 
-        private NotifyIcon _trayIcon = new();
+        private readonly NotifyIcon _trayIcon = new();
+        private readonly ContextMenuStrip _trayMenu = new();
+
+        /// <summary>The Client ID the current _client was created with, so we can skip needless
+        /// reconnects when the textbox loses focus without the value actually changing.</summary>
+        private string? _connectedClientId;
 
         public MainForm()
         {
             InitializeComponent();
 
             // === CUSTOM ICON SETUP ===
-            try
-            {
-                var appIcon = new Icon("appicon.ico");
-                this.Icon = appIcon;                    // Main application window
-                _trayIcon.Icon = appIcon;               // System tray icon
-            }
-            catch (Exception ex)
-            {
-                // Fallback if icon file is missing
-                System.Diagnostics.Debug.WriteLine($"Warning: Could not load appicon.ico → {ex.Message}");
-                _trayIcon.Icon = SystemIcons.Application; // Default fallback
-            }
+            // Pull the icon that's already embedded in this executable (via <ApplicationIcon> in
+            // the .csproj) rather than loading a loose .ico file by relative path. A relative path
+            // depends on the current working directory matching wherever appicon.ico happens to
+            // be, which is not guaranteed for a published/installed copy of the app — using the
+            // embedded resource works reliably regardless of how or where the exe is run from.
+            var appIcon = Icon.ExtractAssociatedIcon(Application.ExecutablePath) ?? SystemIcons.Application;
+            this.Icon = appIcon;
+            _trayIcon.Icon = appIcon;
 
             LoadConfig();
             SetupTrayIcon();
@@ -60,15 +68,44 @@ namespace ScheduledDiscordRPC
             ConfigManager.Save(_config);
         }
 
+        /// <summary>
+        /// (Re)connects the Discord RPC client using the currently configured Client ID. Safe to
+        /// call repeatedly — it's a no-op if the ID hasn't actually changed since the last
+        /// successful connection, to avoid needlessly dropping and re-establishing the Discord
+        /// connection (e.g. every time the Client ID textbox merely loses focus).
+        /// </summary>
         private void SetupClient()
         {
-            if (!string.IsNullOrWhiteSpace(_config.ClientId))
+            var clientId = _config.ClientId;
+            if (string.IsNullOrWhiteSpace(clientId))
             {
                 _client?.Dispose();
-                _client = new DiscordRpcClient(_config.ClientId);
-                _client.OnReady += (sender, e) => this.Invoke(() => lblStatus.Text = $"✅ Connected ({e.User.Username})");
-                _client.Initialize();
+                _client = null;
+                _connectedClientId = null;
+                return;
             }
+
+            if (_client != null && clientId == _connectedClientId)
+                return; // Already connected (or connecting) with this exact ID — nothing to do.
+
+            _client?.Dispose();
+            _connectedClientId = clientId;
+            _client = new DiscordRpcClient(clientId);
+            _client.OnReady += (sender, e) =>
+            {
+                this.Invoke(() =>
+                {
+                    lblStatus.Text = $"✅ Connected ({e.User.Username})";
+                    // The 30s timer may not have ticked yet since Discord finished connecting —
+                    // apply immediately so the presence doesn't lag behind on startup / ID change.
+                    ApplyCurrentSchedule();
+                });
+            };
+            _client.OnError += (sender, e) =>
+            {
+                this.Invoke(() => lblStatus.Text = $"⚠️ Discord error: {e.Message}");
+            };
+            _client.Initialize();
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -100,6 +137,12 @@ namespace ScheduledDiscordRPC
             }
         }
 
+        /// <summary>
+        /// Evaluates all schedules against the current time and pushes the corresponding presence
+        /// to Discord if it differs from what's already showing. Called on every timer tick, plus
+        /// immediately after startup, connecting, and any schedule/client-ID edit so changes are
+        /// reflected without waiting for the next 30s poll.
+        /// </summary>
         private void ApplyCurrentSchedule()
         {
             if (_client == null || !_client.IsInitialized) return;
@@ -133,65 +176,93 @@ namespace ScheduledDiscordRPC
             }
         }
 
+        /// <summary>
+        /// Whether <paramref name="s"/> should be considered active at <paramref name="now"/>.
+        /// Non-recurring schedules are a simple absolute-time range check. Recurring schedules are
+        /// split into "does today match the recurrence pattern" (<see cref="IsDateActive"/>) and
+        /// "are we currently within the time-of-day window", with special handling for schedules
+        /// that wrap past midnight (e.g. 22:00-06:00): if "now" falls in the early-morning tail of
+        /// such a window, the day whose recurrence pattern actually matters is *yesterday* — the
+        /// day the occurrence started — not today.
+        /// </summary>
         private bool IsScheduleActive(Schedule s, DateTime now)
         {
-            if (s.Recurrence.EndDate.HasValue && now.Date > s.Recurrence.EndDate.Value.Date)
-                return false;
-
-            bool dateMatches = false;
-
-            switch (s.Recurrence.Type)
+            if (s.Recurrence.Type == RecurrenceType.None)
             {
-                case RecurrenceType.None:
-                    dateMatches = now >= s.Start && now < s.End;
-                    break;
-
-                case RecurrenceType.Daily:
-                case RecurrenceType.Weekday:
-                case RecurrenceType.Weekly:
-                    int daysSinceStart = (now.Date - s.Start.Date).Days;
-                    if (daysSinceStart < 0) return false;
-                    if (s.Recurrence.Type == RecurrenceType.Weekday)
-                    {
-                        if (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday) return false;
-                    }
-                    else if (s.Recurrence.Type == RecurrenceType.Weekly)
-                    {
-                        if (!s.Recurrence.DaysOfWeek.Contains(now.DayOfWeek)) return false;
-                        int weeksSinceStart = daysSinceStart / 7;
-                        if (weeksSinceStart % s.Recurrence.Interval != 0) return false;
-                    }
-                    dateMatches = daysSinceStart % s.Recurrence.Interval == 0;
-                    break;
-
-                case RecurrenceType.Monthly:
-                    if (s.Recurrence.DayOfMonth.HasValue)
-                    {
-                        dateMatches = now.Day == s.Recurrence.DayOfMonth.Value;
-                    }
-                    else if (s.Recurrence.WeekOfMonth.HasValue && s.Recurrence.DayOfWeekForMonth.HasValue)
-                    {
-                        var nthDate = GetNthWeekdayOfMonth(now.Year, now.Month,
-                            s.Recurrence.DayOfWeekForMonth.Value, s.Recurrence.WeekOfMonth.Value);
-                        dateMatches = now.Date == nthDate.Date;
-                    }
-                    break;
+                // One-off schedule: Start/End are absolute timestamps, so a direct range check
+                // already handles all-day and overnight-spanning cases correctly with no extra
+                // date/time-of-day splitting needed.
+                return now >= s.Start && now < s.End;
             }
 
-            if (!dateMatches) return false;
-
-            if (s.IsAllDay) return true;
+            if (s.IsAllDay)
+            {
+                if (s.Recurrence.EndDate.HasValue && now.Date > s.Recurrence.EndDate.Value.Date)
+                    return false;
+                return IsDateActive(s, now.Date);
+            }
 
             var startTime = s.Start.TimeOfDay;
             var endTime = s.End.TimeOfDay;
-            var nowTime = now.TimeOfDay;
+            bool overnightWrap = endTime <= startTime;
+            bool inWrapTail = overnightWrap && now.TimeOfDay < endTime;
+            DateTime referenceDate = inWrapTail ? now.Date.AddDays(-1) : now.Date;
 
-            if (endTime > startTime)
-                return nowTime >= startTime && nowTime < endTime;
-            else
-                return nowTime >= startTime || nowTime < endTime;
+            if (s.Recurrence.EndDate.HasValue && referenceDate > s.Recurrence.EndDate.Value.Date)
+                return false;
+
+            if (!IsDateActive(s, referenceDate))
+                return false;
+
+            var nowTime = now.TimeOfDay;
+            return overnightWrap
+                ? (nowTime >= startTime || nowTime < endTime)
+                : (nowTime >= startTime && nowTime < endTime);
         }
 
+        /// <summary>
+        /// Whether <paramref name="date"/> (a calendar date, no time-of-day) matches the
+        /// schedule's recurrence pattern. Only called for recurring schedules — see
+        /// <see cref="IsScheduleActive"/> for how the reference date is chosen.
+        /// </summary>
+        private bool IsDateActive(Schedule s, DateTime date)
+        {
+            int daysSinceStart = (date - s.Start.Date).Days;
+            if (daysSinceStart < 0) return false;
+
+            switch (s.Recurrence.Type)
+            {
+                case RecurrenceType.Daily:
+                    return daysSinceStart % s.Recurrence.Interval == 0;
+
+                case RecurrenceType.Weekday:
+                    return date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday;
+
+                case RecurrenceType.Weekly:
+                    if (!s.Recurrence.DaysOfWeek.Contains(date.DayOfWeek)) return false;
+                    // Interval applies in units of whole weeks since the start, not raw days —
+                    // using days here would wrongly exclude valid days when DaysOfWeek contains
+                    // more than one day and Interval > 1 (raw day-count isn't a multiple of 7).
+                    int weeksSinceStart = daysSinceStart / 7;
+                    return weeksSinceStart % s.Recurrence.Interval == 0;
+
+                case RecurrenceType.Monthly:
+                    if (s.Recurrence.DayOfMonth.HasValue)
+                        return date.Day == s.Recurrence.DayOfMonth.Value;
+                    if (s.Recurrence.WeekOfMonth.HasValue && s.Recurrence.DayOfWeekForMonth.HasValue)
+                    {
+                        var nthDate = GetNthWeekdayOfMonth(date.Year, date.Month,
+                            s.Recurrence.DayOfWeekForMonth.Value, s.Recurrence.WeekOfMonth.Value);
+                        return date.Date == nthDate.Date;
+                    }
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>Finds the Nth (or, for nth &lt; 0, the last) occurrence of a weekday in a given month.</summary>
         private DateTime GetNthWeekdayOfMonth(int year, int month, DayOfWeek dayOfWeek, int nth)
         {
             if (nth < 0) // Last
@@ -207,11 +278,30 @@ namespace ScheduledDiscordRPC
             return firstOccurrence.AddDays(7 * (nth - 1));
         }
 
+        /// <summary>
+        /// Compares every field that's actually sent to Discord, so ApplyCurrentSchedule can tell
+        /// whether a new presence needs to be pushed. Must stay in sync with the fields populated
+        /// in ApplyCurrentSchedule — missing one here (as small image / buttons previously were)
+        /// means changes to that field silently fail to reach Discord because the app thinks
+        /// nothing changed.
+        /// </summary>
         private bool PresenceEquals(RichPresence a, RichPresence b)
         {
-            return a.Details == b.Details && a.State == b.State &&
-                   a.Assets?.LargeImageKey == b.Assets?.LargeImageKey &&
-                   a.Assets?.LargeImageText == b.Assets?.LargeImageText;
+            if (a.Details != b.Details || a.State != b.State) return false;
+            if (a.Assets?.LargeImageKey != b.Assets?.LargeImageKey) return false;
+            if (a.Assets?.LargeImageText != b.Assets?.LargeImageText) return false;
+            if (a.Assets?.SmallImageKey != b.Assets?.SmallImageKey) return false;
+            if (a.Assets?.SmallImageText != b.Assets?.SmallImageText) return false;
+
+            var aButtons = a.Buttons ?? Array.Empty<DiscordRPC.Button>();
+            var bButtons = b.Buttons ?? Array.Empty<DiscordRPC.Button>();
+            if (aButtons.Length != bButtons.Length) return false;
+            for (int i = 0; i < aButtons.Length; i++)
+            {
+                if (aButtons[i].Label != bButtons[i].Label || aButtons[i].Url != bButtons[i].Url)
+                    return false;
+            }
+            return true;
         }
 
         private void SetupTrayIcon()
@@ -220,10 +310,9 @@ namespace ScheduledDiscordRPC
             _trayIcon.Text = "Scheduled Discord RPC";
             _trayIcon.DoubleClick += (s, e) => ShowMainWindow();
 
-            var menu = new ContextMenuStrip();
-            menu.Items.Add("Show", null, (s, e) => ShowMainWindow());
-            menu.Items.Add("Exit", null, (s, e) => Application.Exit());
-            _trayIcon.ContextMenuStrip = menu;
+            _trayMenu.Items.Add("Show", null, (s, e) => ShowMainWindow());
+            _trayMenu.Items.Add("Exit", null, (s, e) => Application.Exit());
+            _trayIcon.ContextMenuStrip = _trayMenu;
         }
 
         private void ShowMainWindow()
@@ -233,15 +322,26 @@ namespace ScheduledDiscordRPC
             this.BringToFront();
         }
 
+        /// <summary>Adds or removes the app from HKCU\...\Run so it can launch at Windows sign-in.</summary>
         private void ToggleAutoStart(bool enable)
         {
-            var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
-                @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-            if (key == null) return;
-            if (enable)
-                key.SetValue("ScheduledDiscordRPC", Application.ExecutablePath);
-            else
-                key.DeleteValue("ScheduledDiscordRPC", false);
+            try
+            {
+                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
+                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
+                if (key == null) return;
+                if (enable)
+                    key.SetValue("ScheduledDiscordRPC", Application.ExecutablePath);
+                else
+                    key.DeleteValue("ScheduledDiscordRPC", throwOnMissingValue: false);
+            }
+            catch (Exception ex)
+            {
+                // Registry access can fail under restricted environments/permissions — this is a
+                // convenience feature, not core functionality, so log and move on rather than
+                // crashing the app over it.
+                System.Diagnostics.Debug.WriteLine($"Warning: failed to update startup registry entry → {ex.Message}");
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -333,11 +433,6 @@ namespace ScheduledDiscordRPC
                 _trayIcon.ShowBalloonTip(3000, "Scheduled Discord RPC", "Still running in the system tray", ToolTipIcon.Info);
             }
             base.OnFormClosing(e);
-        }
-
-        private void lblClientId_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

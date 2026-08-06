@@ -10,17 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="appicon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appicon.ico">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <!--
+    appicon.ico only needs to exist at build time for ApplicationIcon (above) to embed it into the
+    exe's Win32 resources — it is not read as a loose file at runtime (MainForm extracts the icon
+    back out of the running exe via Icon.ExtractAssociatedIcon), so it deliberately has no
+    Content/None item here and is not copied to the output directory.
+  -->
 
 </Project>

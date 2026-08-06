@@ -464,8 +464,7 @@ namespace ScheduledDiscordRPC
             lblState.Size = new Size(100, 23);
             lblState.TabIndex = 2;
             lblState.Text = "State";
-            lblState.Click += lblState_Click;
-            // 
+            //
             // txtState
             // 
             txtState.Location = new Point(160, 58);

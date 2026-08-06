@@ -18,9 +18,21 @@ namespace ScheduledDiscordRPC
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                components?.Dispose();
+
+                // _trayIcon/_trayMenu/_timer/_client (declared in MainForm.cs) aren't added to
+                // the designer's component container, so they need explicit cleanup here.
+                // Hiding the tray icon before disposing it (rather than relying on process
+                // teardown) avoids the classic WinForms bug where a "ghost" tray icon lingers in
+                // the taskbar until the user mouses over it.
+                _trayIcon.Visible = false;
+                _trayIcon.Dispose();
+                _trayMenu.Dispose();
+                _timer.Stop();
+                _timer.Dispose();
+                _client?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -47,8 +59,7 @@ namespace ScheduledDiscordRPC
             lblClientId.Size = new Size(128, 23);
             lblClientId.TabIndex = 0;
             lblClientId.Text = "Discord Application ID";
-            lblClientId.Click += lblClientId_Click;
-            // 
+            //
             // txtClientId
             // 
             txtClientId.Location = new Point(154, 17);

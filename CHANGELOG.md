@@ -5,6 +5,26 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] - 2026-08-06
+
+A visual overhaul — no functional or `config.json` changes, existing schedules and settings carry
+over with no action needed.
+
+### Added
+- **Modernized, dark, Windows 11 / Discord-inspired UI** across both the main window and the
+  Add/Edit Schedule dialog: a dark blurple-accented color theme, flat rounded buttons, restyled
+  text fields/combo boxes/checkboxes, a redesigned schedule grid, pill-shaped "chip" weekday
+  toggles (matching the day picker used in Windows' own Clock app), card-style sections replacing
+  the beveled `GroupBox` look, flat owner-drawn tabs with an accent underline, and a native dark
+  title bar with rounded corners on Windows 11.
+- No new dependencies — the new look (`UiTheme.cs`, `Card.cs`) is built entirely on the existing
+  WinForms/GDI+ toolkit already in use, so the published exe's size and startup time are unchanged.
+
+### Known limitation
+- Date/time picker fields keep their native (light) appearance — WinForms' `DateTimePicker` ignores
+  color theming even when its visual-style chrome is otherwise stripped, and a full fix would
+  require a custom-drawn replacement control.
+
 ## [1.1.0] - 2026-08-06
 
 A bug-fix and hardening release — no changes to `config.json`'s format, so existing schedules

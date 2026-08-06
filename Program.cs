@@ -26,6 +26,12 @@ namespace ScheduledDiscordRPC
             // To customize application configuration such as high DPI settings,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
+            // Must be called before the first window is created — sets the app-wide default font
+            // (Segoe UI Variable on Windows 11, falling back gracefully) so every control picks up
+            // the modernized look without having to be touched individually in the Designer files.
+            Application.SetDefaultFont(UiTheme.BaseFont);
+
             Application.Run(new MainForm());
         }
 

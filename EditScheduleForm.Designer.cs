@@ -41,19 +41,19 @@ namespace ScheduledDiscordRPC
         private System.Windows.Forms.Label lblState;
         private System.Windows.Forms.TextBox txtState;
 
-        private System.Windows.Forms.GroupBox grpLargeImage;
+        private Card grpLargeImage;
         private System.Windows.Forms.Label lblLargeKey;
         private System.Windows.Forms.TextBox txtLargeImageKey;
         private System.Windows.Forms.Label lblLargeText;
         private System.Windows.Forms.TextBox txtLargeImageText;
 
-        private System.Windows.Forms.GroupBox grpSmallImage;
+        private Card grpSmallImage;
         private System.Windows.Forms.Label lblSmallKey;
         private System.Windows.Forms.TextBox txtSmallImageKey;
         private System.Windows.Forms.Label lblSmallText;
         private System.Windows.Forms.TextBox txtSmallImageText;
 
-        private System.Windows.Forms.GroupBox grpButtons;
+        private Card grpButtons;
         private System.Windows.Forms.Label lblBtn1Text;
         private System.Windows.Forms.TextBox txtBtn1Label;
         private System.Windows.Forms.Label lblBtn1Url;
@@ -111,17 +111,17 @@ namespace ScheduledDiscordRPC
             txtDetails = new TextBox();
             lblState = new Label();
             txtState = new TextBox();
-            grpLargeImage = new GroupBox();
+            grpLargeImage = new Card();
             lblLargeKey = new Label();
             txtLargeImageKey = new TextBox();
             lblLargeText = new Label();
             txtLargeImageText = new TextBox();
-            grpSmallImage = new GroupBox();
+            grpSmallImage = new Card();
             lblSmallKey = new Label();
             txtSmallImageKey = new TextBox();
             lblSmallText = new Label();
             txtSmallImageText = new TextBox();
-            grpButtons = new GroupBox();
+            grpButtons = new Card();
             lblBtn1Text = new Label();
             txtBtn1Label = new TextBox();
             lblBtn1Url = new Label();
@@ -282,61 +282,68 @@ namespace ScheduledDiscordRPC
             pnlWeekly.Name = "pnlWeekly";
             pnlWeekly.Size = new Size(860, 40);
             pnlWeekly.TabIndex = 11;
-            // 
+            //
             // chkSun
-            // 
-            chkSun.Location = new Point(0, 8);
+            //
+            chkSun.Location = new Point(0, 4);
             chkSun.Name = "chkSun";
-            chkSun.Size = new Size(50, 23);
+            chkSun.Size = new Size(64, 30);
             chkSun.TabIndex = 0;
+            chkSun.Tag = "chip";
             chkSun.Text = "Sun";
-            // 
+            //
             // chkMon
-            // 
-            chkMon.Location = new Point(60, 8);
+            //
+            chkMon.Location = new Point(72, 4);
             chkMon.Name = "chkMon";
-            chkMon.Size = new Size(50, 23);
+            chkMon.Size = new Size(64, 30);
             chkMon.TabIndex = 1;
+            chkMon.Tag = "chip";
             chkMon.Text = "Mon";
-            // 
+            //
             // chkTue
-            // 
-            chkTue.Location = new Point(120, 8);
+            //
+            chkTue.Location = new Point(144, 4);
             chkTue.Name = "chkTue";
-            chkTue.Size = new Size(50, 23);
+            chkTue.Size = new Size(64, 30);
             chkTue.TabIndex = 2;
+            chkTue.Tag = "chip";
             chkTue.Text = "Tue";
-            // 
+            //
             // chkWed
-            // 
-            chkWed.Location = new Point(180, 8);
+            //
+            chkWed.Location = new Point(216, 4);
             chkWed.Name = "chkWed";
-            chkWed.Size = new Size(50, 23);
+            chkWed.Size = new Size(64, 30);
             chkWed.TabIndex = 3;
+            chkWed.Tag = "chip";
             chkWed.Text = "Wed";
-            // 
+            //
             // chkThu
-            // 
-            chkThu.Location = new Point(240, 8);
+            //
+            chkThu.Location = new Point(288, 4);
             chkThu.Name = "chkThu";
-            chkThu.Size = new Size(50, 23);
+            chkThu.Size = new Size(64, 30);
             chkThu.TabIndex = 4;
+            chkThu.Tag = "chip";
             chkThu.Text = "Thu";
-            // 
+            //
             // chkFri
-            // 
-            chkFri.Location = new Point(300, 8);
+            //
+            chkFri.Location = new Point(360, 4);
             chkFri.Name = "chkFri";
-            chkFri.Size = new Size(50, 23);
+            chkFri.Size = new Size(64, 30);
             chkFri.TabIndex = 5;
+            chkFri.Tag = "chip";
             chkFri.Text = "Fri";
-            // 
+            //
             // chkSat
-            // 
-            chkSat.Location = new Point(360, 8);
+            //
+            chkSat.Location = new Point(432, 4);
             chkSat.Name = "chkSat";
-            chkSat.Size = new Size(50, 23);
+            chkSat.Size = new Size(64, 30);
             chkSat.TabIndex = 6;
+            chkSat.Tag = "chip";
             chkSat.Text = "Sat";
             // 
             // pnlMonthly
@@ -636,22 +643,23 @@ namespace ScheduledDiscordRPC
             txtBtn2Url.TabIndex = 7;
             // 
             // btnSave
-            // 
+            //
             btnSave.DialogResult = DialogResult.OK;
-            btnSave.Location = new Point(820, 680);
+            btnSave.Location = new Point(788, 708);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(100, 35);
+            btnSave.Size = new Size(110, 40);
             btnSave.TabIndex = 1;
             btnSave.Text = "Save";
             btnSave.Click += btnSave_Click;
-            // 
+            //
             // btnCancel
-            // 
+            //
             btnCancel.DialogResult = DialogResult.Cancel;
-            btnCancel.Location = new Point(930, 680);
+            btnCancel.Location = new Point(910, 708);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(100, 35);
+            btnCancel.Size = new Size(110, 40);
             btnCancel.TabIndex = 2;
+            btnCancel.Tag = "secondary";
             btnCancel.Text = "Cancel";
             // 
             // EditScheduleForm

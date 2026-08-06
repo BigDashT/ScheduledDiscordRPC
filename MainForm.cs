@@ -53,6 +53,14 @@ namespace ScheduledDiscordRPC
             ApplyCurrentSchedule();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            // Applied on Load (not in the constructor) so every control's window handle already
+            // exists — needed for the ComboBox/DateTimePicker native-chrome flattening in UiTheme.
+            UiTheme.ApplyTheme(this);
+        }
+
         private void LoadConfig()
         {
             _config = ConfigManager.Load();

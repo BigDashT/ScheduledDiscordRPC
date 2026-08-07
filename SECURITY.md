@@ -6,7 +6,9 @@ Only the latest version of this software is supported. Security exploits which c
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.0   | :white_check_mark: |
+| 1.2.0   | :white_check_mark: |
+| 1.0.0   | :x:                |
+| 1.0.0   | :x:                |
 | 0.9.X   | :x:                |
 
 
